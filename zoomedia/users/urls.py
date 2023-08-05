@@ -3,5 +3,5 @@ from .apis import UserApi
 
 
 urlpatterns = [
-    path('', UserApi.as_view(),name="register"),
+    path('', UserApi.as_view(),name=""),
 ]

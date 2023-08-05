@@ -1,6 +1,6 @@
 from django.urls import path, include
 
 urlpatterns = [
-     path('users/', include(('zoomedia.users.urls', 'users')) , 'users'),
-     path('auth/', include(('zoomedia.authentication.urls')) , 'auth')
+     path('zoomedia/users/', include(('zoomedia.users.urls', 'users')) , name='users'),
+     path('zoomedia/auth/', include(('zoomedia.authentication.urls' , 'auth')) , name='auth')
 ]
