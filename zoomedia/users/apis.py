@@ -27,6 +27,7 @@ class UserApi(APIView):
                     ]
                 )
         confirm_password = serializers.CharField(max_length=255)
+        username = serializers.CharField(max_length=255)
         
         def validate_email(self, email):
             if BaseUser.objects.filter(email=email).exists():
@@ -48,7 +49,7 @@ class UserApi(APIView):
 
         class Meta:
             model = BaseUser 
-            fields = ("email", "token", "created_at", "updated_at")
+            fields = ("email", "token", "username", "created_at", "updated_at")
 
         def get_token(self, user):
             data = dict()
@@ -70,7 +71,7 @@ class UserApi(APIView):
             user = create_user(
                     email=serializer.validated_data.get("email"),
                     password=serializer.validated_data.get("password"),
-
+                    username=serializer.validated_data.get("username")
                     )
         except Exception as ex:
             return Response(
