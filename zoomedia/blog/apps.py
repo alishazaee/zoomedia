@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class BlogConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'zoomediablog'
+    name = 'zoomedia.blog'
 
     def ready(self) -> None:
-        import blog.signals.delete_follower
+        import zoomedia.blog.signals.delete_follower
