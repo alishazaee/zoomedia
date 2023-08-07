@@ -20,6 +20,13 @@ services:
     ports:
       - 15432:80
 
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - 6379:6379
+
+
   rabbitmq:
     image: "rabbitmq:alpine"
     container_name: rabbitmq
