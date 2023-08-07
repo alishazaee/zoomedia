@@ -10,6 +10,9 @@ class Profile(BaseModel):
     follower_count = models.PositiveBigIntegerField(default=0)
     bio = models.CharField(max_length=255 , null=True, blank=True)
     post_counts = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.user
 class Follow(BaseModel):
     follower=models.ForeignKey(get_user_model(), on_delete=models.CASCADE ,related_name='follower')
     following=models.ForeignKey(get_user_model(), on_delete=models.CASCADE ,related_name='following')

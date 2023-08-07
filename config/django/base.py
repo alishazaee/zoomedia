@@ -19,6 +19,7 @@ LOCAL_APPS = [
     'zoomedia.users.apps.UsersConfig',
     'zoomedia.authentication.apps.AuthenticationConfig',
     'zoomedia.userprofile.apps.UserprofilesConfig',
+    'zoomedia.tasks.apps.TasksConfig',
 
 ]
 

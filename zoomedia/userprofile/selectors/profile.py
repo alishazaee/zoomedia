@@ -9,4 +9,4 @@ def get_following(*, user:get_user_model()) -> int:
     return Follow.objects.filter(follower=user).count()
 
 def get_profile_detail(*,user:get_user_model()) -> Profile:
-    return Profile.objects.get(user_id=user.id)
+    return Profile.objects.get(user__username=user.username)

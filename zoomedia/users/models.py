@@ -54,10 +54,12 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def is_staff(self):
         return self.is_admin
+    
+    
 
 
 
