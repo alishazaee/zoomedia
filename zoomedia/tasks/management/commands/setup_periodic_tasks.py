@@ -3,7 +3,7 @@ from django.db import transaction
 from django.utils.timezone import get_default_timezone_name
 
 from django_celery_beat.models import IntervalSchedule, CrontabSchedule, PeriodicTask
-from zoomedia.userprofile.tasks import profile_info_update as profile_info_update
+from zoomedia.userprofile.tasks import profile_info_update_task 
 
 
 class Command(BaseCommand):
@@ -42,7 +42,7 @@ class Command(BaseCommand):
         """
         periodic_tasks_data = [
         {
-            'task': profile_info_update,
+            'task': profile_info_update_task,
             'name': 'Periodic task description',
             # EveryMinute to everyday
             # https://crontab.guru/#45_15_*_*_*

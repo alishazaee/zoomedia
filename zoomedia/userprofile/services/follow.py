@@ -4,13 +4,7 @@ from django.db.models import QuerySet
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from ..selectors.profile import *
-def cache_profile(*,user:get_user_model()):
-    profile = {
-        "follower_count": get_followers(user=user),
-        "following_count": get_following(user=user)
-    }
-    cache.set(f'profile_{user}', profile, timeout=None , version='')
-
+from .profile import *
 
 def create_follow(* , src_user: get_user_model() , target_username: str  ) -> get_user_model():
     user = get_user_model().objects.get(username=target_username)
