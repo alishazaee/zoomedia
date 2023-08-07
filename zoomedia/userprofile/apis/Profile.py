@@ -24,12 +24,12 @@ class ProfileApi(ApiAuthMixin,APIView):
 
 
     @extend_schema(responses=get_profile_detail_serializer , request=get_profile_detail_serializer)
-    def post(self , request):
+    def put(self , request):
         serializer = get_profile_detail_serializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            query = create_profile(
-                user = request.user,
+            query = update_profile(
+                user = request.user.username,
                 bio=serializer.validated_data.get('bio'),
                 )
         except Exception as ex:

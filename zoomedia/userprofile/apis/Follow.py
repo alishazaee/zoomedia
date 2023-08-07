@@ -27,7 +27,7 @@ class FollowApi( ApiAuthMixin,APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(status=status.HTTP_204_NO_CONTENT)         
-    @extend_schema(responses=get_profile_detail)
+    @extend_schema(responses=get_profile_serializer)
     def post(self , request,username):
         try:
             query = create_follow(
@@ -40,7 +40,7 @@ class FollowApi( ApiAuthMixin,APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        serilaizer = get_profile_detail(query)
+        serilaizer = get_profile_serializer(query)
         return Response(serilaizer.data)
      
         

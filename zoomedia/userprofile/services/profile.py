@@ -5,9 +5,16 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from ..selectors.profile import *
 
-def create_profile(*,user:get_user_model() , bio:str | None ) -> Profile:
+def create_profile(*,username:str , bio:str | None ) -> Profile:
+    user = get_user_model().objects.get(username=username)
     return Profile.objects.create(user=user , bio=bio)
 
+def update_profile(*,username:str , bio:str | None ) -> Profile:
+    user = get_user_model().objects.get(username=username)
+    profile = Profile.objects.create(user=user , bio=bio)
+    profile.bio = bio
+    profile.save()
+    return profile
 
 def profile_info_update():
     profiles =  cache.keys("profile_*")

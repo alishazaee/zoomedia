@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from zoomedia.users.models import BaseUser
 from django.core.cache import cache
-
 class user_serializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -19,16 +18,15 @@ class get_profile_detail_serializer( serializers.ModelSerializer):
     following_count= serializers.CharField(read_only=True)
     
     def to_representation(self, instance):
-        represent =  super().to_representation(instance)
+        rep = super().to_representation(instance)
         cache_profile = cache.get(f"profile_{instance.user}", {})
         if cache_profile:
-                represent["posts_count"] = cache_profile.get("posts_count")
-                represent["subscriber_count"] = cache_profile.get("subscribers_count")
-                represent["subscription_count"] = cache_profile.get("subscriptions_count")
+                rep["follower_count"] = cache_profile.get("follower_count")
+                rep["following_count"] = cache_profile.get("following_count")
 
-        return represent
+        return rep
 
-
+    
     class Meta:
         model = Profile
         fields = ('user' , 'bio' ,'follower_count' , 'following_count')
