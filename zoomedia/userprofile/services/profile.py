@@ -11,7 +11,7 @@ def create_profile(*,username:str , bio:str | None ) -> Profile:
 
 def update_profile(*,username:str , bio:str | None ) -> Profile:
     user = get_user_model().objects.get(username=username)
-    profile = Profile.objects.get(user=user , bio=bio)
+    profile = Profile.objects.get(user=user)
     profile.bio = bio
     profile.save()
     return profile

@@ -22,6 +22,11 @@ class FollowApi( ApiAuthMixin,APIView):
         src_user=request.user
         try:
             delete_follow(src_user=src_user, target_username= username)
+        except ObjectDoesNotExist as ex:
+            return Response(
+                {"detail": "Username not Found ! "},
+                status=status.HTTP_400_BAD_REQUEST,
+            )      
         except Exception as ex:
             return Response(
                 {"detail": "Database Error - " + str(ex)},
@@ -35,6 +40,11 @@ class FollowApi( ApiAuthMixin,APIView):
                 src_user = request.user,
                 target_username=username
                 )
+        except ObjectDoesNotExist as ex:
+            return Response(
+                {"detail": "Username not Found ! "},
+                status=status.HTTP_400_BAD_REQUEST,
+            )      
         except Exception as ex:
             return Response(
                 {"detail": "Database Error - " + str(ex)},
@@ -51,10 +61,10 @@ class FollowerApi( ApiAuthMixin,APIView):
     class FilterUsernameSerializer(serializers.Serializer):
         username = serializers.CharField(max_length=255 , required=False)
     class OutputUserSerializer(serializers.Serializer):
-        following = user_serializer()
+        follower = user_serializer()
         class Meta:
             model = Follow
-            fields = ('following',)
+            fields = ('follower',)
 
     
     @extend_schema(request=FilterUsernameSerializer , responses=OutputUserSerializer)
@@ -98,7 +108,7 @@ class FollowingApi( ApiAuthMixin,APIView):
         following = user_serializer()
         class Meta:
             model = Follow
-            fields = ('follower',)
+            fields = ('following',)
 
     @extend_schema(request=FilterUsernameSerializer , responses=OutputUserserializer)
     def post(self, request ):
