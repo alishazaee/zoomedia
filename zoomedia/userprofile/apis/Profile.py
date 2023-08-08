@@ -29,7 +29,7 @@ class ProfileApi(ApiAuthMixin,APIView):
         serializer.is_valid(raise_exception=True)
         try:
             query = update_profile(
-                user = request.user.username,
+                username = request.user.username,
                 bio=serializer.validated_data.get('bio'),
                 )
         except Exception as ex:

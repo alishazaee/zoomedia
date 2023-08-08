@@ -11,12 +11,12 @@ def create_profile(*,username:str , bio:str | None ) -> Profile:
 
 def update_profile(*,username:str , bio:str | None ) -> Profile:
     user = get_user_model().objects.get(username=username)
-    profile = Profile.objects.create(user=user , bio=bio)
+    profile = Profile.objects.get(user=user , bio=bio)
     profile.bio = bio
     profile.save()
     return profile
 
-def profile_info_update():
+def profile_info_from_cache_to_db():
     profiles =  cache.keys("profile_*")
     for key in profiles:
         username = key.replace("profile_" , "")
@@ -33,7 +33,7 @@ def profile_info_update():
 
 def cache_profile(*,user:get_user_model()):
     profile = {
-        "follower_count": get_followers(user=user),
-        "following_count": get_following(user=user)
+        "follower_count": get_follower_count(user=user),
+        "following_count": get_following_count(user=user)
     }
     cache.set(f'profile_{user}', profile, timeout=None )
