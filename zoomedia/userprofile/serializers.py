@@ -23,16 +23,18 @@ class get_profile_detail_serializer( serializers.ModelSerializer):
         if cache_profile:
                 rep["follower_count"] = cache_profile.get("follower_count")
                 rep["following_count"] = cache_profile.get("following_count")
+                rep["post_counts"] = cache_profile.get("post_counts")
 
         return rep
 
     
     class Meta:
         model = Profile
-        fields = ('user' , 'bio' ,'follower_count' , 'following_count')
+        fields = ('user' , 'bio' , "post_counts", "follower_count" , 'following_count')
     
 class get_profile_serializer( serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ("username",)
+
 

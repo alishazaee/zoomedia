@@ -1,6 +1,7 @@
 from ..models import Follow , Profile
 from django.db.models import QuerySet
 from django.contrib.auth import get_user_model
+from zoomedia.blog.models import Post 
 
 def get_follower_count(*, user: get_user_model())-> int:
     return Follow.objects.filter(following=user).count()
@@ -20,3 +21,6 @@ def get_following(*, username:str) -> QuerySet[get_user_model()]:
     user = get_user_model().objects.get(username=username)
     following = Follow.objects.filter(follower=user)
     return following
+
+def get_post_count(*,  user:get_user_model())-> int :
+    return Post.objects.filter(author=user).count()
