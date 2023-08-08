@@ -20,3 +20,9 @@ class postserializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('url' , 'author' , 'title' , 'description')
+
+class Filterpostserializer(serializers.Serializer):
+        search = serializers.CharField(required=False, max_length=100)
+        author__in= serializers.CharField(required=False, max_length=100)
+        slug = serializers.CharField(required=False, max_length=100)
+        description = serializers.CharField(required=False, max_length=1000)

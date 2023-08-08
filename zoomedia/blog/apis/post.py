@@ -11,12 +11,10 @@ from rest_framework.pagination import PageNumberPagination
 
 from ..models import Post 
 from zoomedia.api.mixins import ApiAuthMixin
-from ..serializer import postserializer
+from ..serializer import postserializer , Filterpostserializer
 from ..selectors.post import *
 from ..services.post import *
 class PostApi(ApiAuthMixin , APIView):
-    class Pagination(LimitOffsetPagination):
-        default_limit = 10
     
     @extend_schema(
         responses=postserializer,
@@ -38,6 +36,34 @@ class PostApi(ApiAuthMixin , APIView):
             )
         return Response(postserializer(query, context={"request":request}).data)
 
+
+class FeedApi(ApiAuthMixin , APIView):
+    class Pagination(LimitOffsetPagination):
+        default_limit = 10
+
+    @extend_schema(
+        parameters=[Filterpostserializer],
+        responses=postserializer,
+    )
+    def get(self, request):
+        filters_serializer = Filterpostserializer(data=request.query_params)
+        filters_serializer.is_valid(raise_exception=True)
+
+        try:
+            query = post_list(filters=filters_serializer.validated_data, user=request.user)
+        except Exception as ex:
+            return Response(
+                {"detail": "Filter Error - " + str(ex)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return get_paginated_response_context(
+            pagination_class=self.Pagination,
+            serializer_class=postserializer,
+            queryset=query,
+            request=request,
+            view=self,
+        )
 
     
     
