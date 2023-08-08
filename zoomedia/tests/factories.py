@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 import factory
-from zoomedia.userprofile.models import Follow
+from zoomedia.userprofile.models import Follow 
+from zoomedia.blog.models import Post
 from faker import Faker
 from django.utils import timezone
 from zoomedia.userprofile.models import Profile
@@ -10,14 +11,15 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
     
-    email = factory.Iterator(["alis@gmail.com" ,"masih@gmail.com"])
+    username = factory.LazyAttribute(lambda _ :f'{faker.unique.company()}')
+    email = factory.LazyAttribute(lambda _: faker.unique.email())
     password = factory.PostGenerationMethodCall('set_password' , 'adm!n')
 
 class FollowFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Follow
-    Follower = factory.SubFactory(UserFactory)
-    Following = factory.SubFactory(UserFactory)
+    follower = factory.SubFactory(UserFactory)
+    following = factory.SubFactory(UserFactory)
 
 class ProfileFactory(factory.django.DjangoModelFactory):
     class Meta : 
@@ -30,6 +32,9 @@ class ProfileFactory(factory.django.DjangoModelFactory):
 
 
 class PostFactory(factory.django.DjangoModelFactory):
+    class Meta : 
+        model = Post
+
     title = factory.LazyAttribute(lambda _ :f'{faker.unique.company()}')
     description = factory.LazyAttribute(lambda _ : f'{faker.unique.company()}')
     slug = factory.LazyAttribute(lambda _ : f'{faker.unique.company()}' )
