@@ -13,17 +13,7 @@ services:
     networks:
       - web_net
 
-  pgadmin:
-    image: docker.alishazaee.ir/databases/dpage/pgadmin4:4.23
-    environment:
-      PGADMIN_DEFAULT_EMAIL: alishazaee@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: postgres
-      PGADMIN_LISTEN_PORT: 80
 
-    ports:
-      - 15432:80
-    networks:
-      - web_net
 
   redis:
     image: docker.alishazaee.ir/databases/redis:7
@@ -33,7 +23,7 @@ services:
 
 
   rabbitmq:
-    image: "docker.alishazaee.ir/rabbitmq:alpine"
+    image: "docker.alishazaee.ir/queue/rabbitmq:alpine"
     container_name: rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -67,7 +57,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=web_net"
       - "traefik.http.routers.backend.entrypoints=http"
-      - "traefik.http.routers.backend.rule=Host(`api.alishazaee.ir`)"
+      - "traefik.http.routers.backend.rule=Host(`git.alishazaee.ir`)"
       - "traefik.http.routers.backend.service=backend-secure"
       - "traefik.http.routers.backend.middlewares=https-redirect"
       - "traefik.http.routers.backend-secure.entrypoints=https"
