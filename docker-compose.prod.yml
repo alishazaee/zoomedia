@@ -1,0 +1,121 @@
+version: "3.9"
+
+services:
+  db:
+    image: docker.alishazaee.ir/databases/postgres:14.1
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=zoomedia
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - web_net
+
+  pgadmin:
+    image: docker.alishazaee.ir/databases/dpage/pgadmin4:4.23
+    environment:
+      PGADMIN_DEFAULT_EMAIL: alishazaee@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_LISTEN_PORT: 80
+
+    ports:
+      - 15432:80
+    networks:
+      - web_net
+
+  redis:
+    image: docker.alishazaee.ir/databases/redis:7
+    container_name: redis
+    networks:
+      - web_net
+
+
+  rabbitmq:
+    image: "docker.alishazaee.ir/rabbitmq:alpine"
+    container_name: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - web_net
+
+
+  django:
+    image: docker.alishazaee.ir/backend/backend:latest
+    container_name: django
+    command: ./docker/web_entrypoint.sh
+    environment:
+      - DATABASE_URL=psql://postgres:postgres@db:5432/zoomedia
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - SECRET_KEY="y@dso6dva(8_l0==m(w=ypt-h23)8)#%=yr9j)dop$k_%*@vrl"
+      - ALLOWED_HOSTS=["api.alishazaee.ir"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+    restart: on-failure
+    networks:
+      - web_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web_net"
+      - "traefik.http.routers.backend.entrypoints=http"
+      - "traefik.http.routers.backend.rule=Host(`api.alishazaee.ir`)"
+      - "traefik.http.routers.backend.service=backend-secure"
+      - "traefik.http.routers.backend.middlewares=https-redirect"
+      - "traefik.http.routers.backend-secure.entrypoints=https"
+      - "traefik.http.routers.backend-secure.rule=Host(`api.alishazaee.ir`)"
+      - "traefik.http.routers.backend-secure.tls=true"
+      - "traefik.http.routers.backend-secure.tls.options=default"
+      - "traefik.http.routers.backend-secure.tls.certresolver=mycert"
+      - "traefik.http.routers.backend-secure.service=backend-secure"
+      - "traefik.http.services.backend-secure.loadbalancer.server.port=8000"
+
+  celery:
+    build:
+      context: .
+      dockerfile: docker/production.Dockerfile
+    # command: celery -A zoomedia.tasks worker -l info --without-gossip --without-mingle --without-heartbeat
+    container_name: worker
+    command: ./docker/celery_entrypoint.sh
+    environment:
+      - DATABASE_URL=psql://postgres:postgres@db:5432/zoomedia
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - rabbitmq
+    restart: on-failure
+    networks:
+      - web_net
+
+  beats:
+    build:
+      context: .
+      dockerfile: docker/production.Dockerfile
+    # command: celery -A zoomedia.tasks beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    container_name: beats
+    command: ./docker/beats_entrypoint.sh
+    environment:
+      - DATABASE_URL=psql://postgres:postgres@db:5432/zoomedia
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - rabbitmq
+    restart: on-failure
+    networks:
+      - web_net
+
+
+networks:
+  web_net:
