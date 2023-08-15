@@ -6,7 +6,7 @@ FROM python:3.10
 ADD requirements/ requirements/
 RUN pip install -r requirements/production.txt
 
-# Get the django project into the docker container
+#  Get the django project into the docker container
 RUN mkdir /app
 WORKDIR /app
 ADD ./ /app/
