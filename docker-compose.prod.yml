@@ -79,9 +79,7 @@ services:
       - "traefik.http.services.backend-secure.loadbalancer.server.port=8000"
 
   celery:
-    build:
-      context: .
-      dockerfile: docker/production.Dockerfile
+    image: docker.alishazaee.ir/backend/backend:latest
     # command: celery -A zoomedia.tasks worker -l info --without-gossip --without-mingle --without-heartbeat
     container_name: worker
     command: ./docker/celery_entrypoint.sh
@@ -98,9 +96,7 @@ services:
       - web_net
 
   beats:
-    build:
-      context: .
-      dockerfile: docker/production.Dockerfile
+    image: docker.alishazaee.ir/backend/backend:latest
     # command: celery -A zoomedia.tasks beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     container_name: beats
     command: ./docker/beats_entrypoint.sh
