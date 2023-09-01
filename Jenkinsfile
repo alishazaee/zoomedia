@@ -21,7 +21,8 @@ pipeline {
     stage('Build and push Docker image') {
       steps {
         script {
-          def dockerImage = docker.build(env.DOCKER_IMAGE_TAG, '-f docker/production.Dockerfile .')
+          sh 'docker build -t env.DOCKER_IMAGE_TAG -f docker/production.Dockerfile .'
+  
         }
       }
     }
