@@ -14,7 +14,7 @@ pipeline {
       steps {
         script {
           sh 'apt install pip pipenv -y || (apt update && apt install pip pipenv -y)'
-          sh 'pipev shell'
+          sh 'pipenv shell'
           sh 'pip install bump==1.3.2'
         }
       }
