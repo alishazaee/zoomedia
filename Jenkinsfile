@@ -22,9 +22,6 @@ pipeline {
       steps {
         script {
           def dockerImage = docker.build(env.DOCKER_IMAGE_TAG, '-f docker/production.Dockerfile .')
-          withDockerRegistry(credentialsId: '6140a374-aa4e-4fa0-9187-aef779023cc8	', url: env.DOCKER_REGISTRY) {
-          dockerImage.push()
-          }
         }
       }
     }
