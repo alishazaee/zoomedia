@@ -13,13 +13,14 @@ pipeline {
   stage('Installing Bump') {
       steps {
         script {
-          sh 'apt install pip -y || (apt update && apt install pip -y)'
+          sh 'apt install pip pipenv -y || (apt update && apt install pip pipenv -y)'
+          sh 'pipev shell'
           sh 'pip install bump==1.3.2'
         }
       }
     }
 
-    stage('Set version') {
+    stage('Set version') {cd
       steps {
         script {
           sh 'bump patch'
