@@ -12,9 +12,12 @@ pipeline {
 
     stage('Set version') {
       steps {
-        sh 'bump patch'
-        def VERSION = sh '$(bump)-${env.APP_VERSION}'
         script {
+          sh 'bump patch'
+          def VERSION
+          script {
+            VERSION = sh(script: 'echo $(bump)-${env.APP_VERSION}', returnStdout: true).trim()
+          }
           sh "echo VERSION Number :  ${VERSION} "
         }
       }
