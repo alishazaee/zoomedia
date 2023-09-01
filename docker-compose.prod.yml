@@ -35,7 +35,7 @@ services:
 
 
   django:
-    image: zoomedia/backend:${VERSION}
+    image: alishazaee/zoomedia:${VERSION}
     container_name: django
     command: ./docker/web_entrypoint.sh
     environment:
@@ -55,7 +55,7 @@ services:
       - web_net
 
   celery:
-    image: zoomedia/backend:${VERSION}
+    image: alishazaee/zoomedia:${VERSION}
     # command: celery -A zoomedia.tasks worker -l info --without-gossip --without-mingle --without-heartbeat
     container_name: worker
     command: ./docker/celery_entrypoint.sh
@@ -72,7 +72,7 @@ services:
       - web_net
 
   beats:
-    image: zoomedia/backend:${VERSION}
+    image: alishazaee/zoomedia:${VERSION}
     # command: celery -A zoomedia.tasks beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     container_name: beats
     command: ./docker/beats_entrypoint.sh
