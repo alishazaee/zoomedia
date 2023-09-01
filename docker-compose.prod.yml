@@ -53,19 +53,6 @@ services:
     restart: on-failure
     networks:
       - web_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=web_net"
-      - "traefik.http.routers.backend.entrypoints=http"
-      - "traefik.http.routers.backend.service=backend-secure"
-      - "traefik.http.routers.backend.middlewares=https-redirect"
-      - "traefik.http.routers.backend-secure.entrypoints=https"
-      - "traefik.http.routers.backend-secure.rule=Host(`api.alishazaee.ir`)"
-      - "traefik.http.routers.backend-secure.tls=true"
-      - "traefik.http.routers.backend-secure.tls.options=default"
-      - "traefik.http.routers.backend-secure.tls.certresolver=mycert"
-      - "traefik.http.routers.backend-secure.service=backend-secure"
-      - "traefik.http.services.backend-secure.loadbalancer.server.port=8000"
 
   celery:
     image: zoomedia/backend:${VERSION}
