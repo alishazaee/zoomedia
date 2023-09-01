@@ -12,8 +12,10 @@ pipeline {
 
     stage('Set version') {
       steps {
+        sh 'bump patch'
+        env.VERSION = sh '$(bump)-${env.APP_VERSION}'
         script {
-          sh "echo VERSION Number :  ${env.APP_VERSION} "
+          sh "echo VERSION Number :  ${VERSION} "
         }
       }
     }
@@ -31,8 +33,9 @@ pipeline {
     stage('Build and push Docker image') {
       steps {
         script {
-            sh "docker build -t ${DOCKER_REGISTRY}/${DOCKER_REPO}:v1.0.${APP_VERSION} -f docker/production.Dockerfile ."
-            sh "docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:v1.0.${APP_VERSION}"
+            sh "docker build -t ${DOCKER_REGISTRY}/${DOCKER_REPO}:v${VERSION} -f docker/production.Dockerfile ."
+            sh "docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}:v${VERSION}"
+
         }
       }
     }
