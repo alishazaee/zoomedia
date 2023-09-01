@@ -13,7 +13,7 @@ pipeline {
   stage('Installing Bump') {
       steps {
         script {
-          sh 'apt install pip -y'
+          sh 'apt install pip -y || (apt update && apt install pip -y)'
           sh 'pip install bump==1.3.2'
         }
       }
