@@ -3,7 +3,7 @@ pipeline {
   
   environment {
     APP_VERSION = "${BUILD_NUMBER}"
-    DOCKER_REGISTRY = "alishazaee"
+    DOCKER_REGISTRY = "alishazaei"
     DOCKER_REPO = "zoomedia"
     DOCKER_IMAGE_TAG = "${DOCKER_REGISTRY}/${DOCKER_REPO}:${APP_VERSION}"
   }
