@@ -10,6 +10,14 @@ pipeline {
 
   stages {
 
+  stage('Installing Bump') {
+      steps {
+        script {
+          sh 'pip install bump==1.3.2'
+        }
+      }
+    }
+
     stage('Set version') {
       steps {
         script {
