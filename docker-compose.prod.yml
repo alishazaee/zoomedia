@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: docker.alishazaee.ir/databases/postgres:14.1
+    image: postgres:14.1
     container_name: postgres
     ports:
       - 5432:5432
@@ -16,14 +16,14 @@ services:
 
 
   redis:
-    image: docker.alishazaee.ir/databases/redis:7
+    image: redis:7
     container_name: redis
     networks:
       - web_net
 
 
   rabbitmq:
-    image: "docker.alishazaee.ir/queue/rabbitmq:alpine"
+    image: rabbitmq:alpine
     container_name: rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -35,7 +35,7 @@ services:
 
 
   django:
-    image: docker.alishazaee.ir/backend/backend:latest
+    image: zoomedia/backend:${VERSION}
     container_name: django
     command: ./docker/web_entrypoint.sh
     environment:
@@ -57,7 +57,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=web_net"
       - "traefik.http.routers.backend.entrypoints=http"
-      - "traefik.http.routers.backend.rule=Host(`git.alishazaee.ir`)"
       - "traefik.http.routers.backend.service=backend-secure"
       - "traefik.http.routers.backend.middlewares=https-redirect"
       - "traefik.http.routers.backend-secure.entrypoints=https"
@@ -69,7 +68,7 @@ services:
       - "traefik.http.services.backend-secure.loadbalancer.server.port=8000"
 
   celery:
-    image: docker.alishazaee.ir/backend/backend:latest
+    image: zoomedia/backend:${VERSION}
     # command: celery -A zoomedia.tasks worker -l info --without-gossip --without-mingle --without-heartbeat
     container_name: worker
     command: ./docker/celery_entrypoint.sh
@@ -86,7 +85,7 @@ services:
       - web_net
 
   beats:
-    image: docker.alishazaee.ir/backend/backend:latest
+    image: zoomedia/backend:${VERSION}
     # command: celery -A zoomedia.tasks beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     container_name: beats
     command: ./docker/beats_entrypoint.sh
