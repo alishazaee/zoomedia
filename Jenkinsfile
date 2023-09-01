@@ -20,7 +20,7 @@ pipeline {
       }
     }
 
-    stage('Set version') {cd
+    stage('Set version') {
       steps {
         script {
           sh 'bump patch'
