@@ -22,11 +22,10 @@ pipeline {
     stage('Set version') {
       steps {
         script {
-          def VERSION
-          script {
-           VERSION = "${env.APP_VERSION}-${BUILD_VERSION}"
-          }
-          sh "echo VERSION Number :  ${VERSION} "
+
+           def VERSION = "${env.APP_VERSION}-${BUILD_VERSION}"
+
+          sh "echo VERSION Number :  ${env.VERSION} "
         }
       }
     }
