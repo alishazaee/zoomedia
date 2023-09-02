@@ -14,7 +14,9 @@ pipeline {
       steps {
         script {
           sh 'docker build  -f docker/production.Dockerfile -t test .'
-          def APP_VERSION = sh(script:'docker run --rm test bump --patch',returnStdout: true)
+          def APP_VERSION = sh(script:'docker run --rm test bump --patch',returnStdout: true).trim()
+          env.APP_VERSION = APP_VERSION
+          sh 'echo ${env.APP_VERSION}'
 
         }
       }
@@ -24,7 +26,8 @@ pipeline {
       steps {
         script {
 
-           def VERSION = sh(script:"${env.APP_VERSION}-${BUILD_VERSION}",returnStdout: true)
+           def VERSION = "${env.APP_VERSION}-${BUILD_VERSION}"
+           env.VERSION = VERSION
 
           sh "echo VERSION Number :  ${env.VERSION} "
         }
