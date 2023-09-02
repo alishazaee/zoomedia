@@ -11,16 +11,17 @@ pipeline {
   stages {
 
   stage('Bumping Version') {
-      steps {
-        script {
-          sh 'docker build  -f docker/production.Dockerfile -t test .'
-          // sh 'docker run  -it --rm test bash'
-          agent {
+      agent {
                 docker {
                     image 'test'
                     reuseNode true
                 }
-            }          
+        } 
+      steps {
+        script {
+          sh 'docker build  -f docker/production.Dockerfile -t test .'
+          // sh 'docker run  -it --rm test bash'
+         
           def OUTPUT = sh(script:'bump --patch',returnStdout: true).trim()
           env.APP_VERSION = OUTPUT
           sh 'echo ${APP_VERSION}'
