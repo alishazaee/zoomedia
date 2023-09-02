@@ -11,30 +11,24 @@ pipeline {
   stages {
 
   stage('Bumping Version') {
-      agent {
-                docker {
-                    image 'test'
-                    reuseNode true
-                }
-        } 
+
       steps {
         script {
           sh 'docker build  -f docker/production.Dockerfile -t test .'
-          // sh 'docker run  -it --rm test bash'
+          sh 'docker run test bash'
          
-          def OUTPUT = sh(script:'bump --patch',returnStdout: true).trim()
+          def OUTPUT = sh(script:'docker exec test bump --patch',returnStdout: true).trim()
           env.APP_VERSION = OUTPUT
           sh 'echo ${APP_VERSION}'
           withCredentials([usernamePassword(credentialsId: 'ff8ef423-6aad-4705-a6f1-a06756855de3', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            sh 'git config --global user.email "jenkins@example.com"'
-            sh 'git config --global user.name jenkins'
+            sh 'docker exec test git config --global user.email "jenkins@example.com"'
+            sh 'docker exec test git config --global user.name jenkins'
 
 
-            sh "git remote origin https://$USERNAME:$PASSWORD@github.com/alishb80/zoomedia.git"
-            sh 'git add .'
-            sh 'git commit -m "ci-pipeline version bumping"'
-            sh 'git push origin HEAD:master'
-            sh 'exit'
+            sh "docker exec test git remote origin https://$USERNAME:$PASSWORD@github.com/alishb80/zoomedia.git"
+            sh 'docker exec test git add .'
+            sh 'docker exec test git commit -m "ci-pipeline version bumping"'
+            sh 'docker exec test git push origin HEAD:master'
 
           }
 
