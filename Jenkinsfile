@@ -24,7 +24,7 @@ pipeline {
         script {
           def VERSION
           script {
-            def VERSION = "${APP_VERSION}-${BUILD_VERSION}"
+           VERSION = "${APP_VERSION}-${BUILD_VERSION}"
           }
           sh "echo VERSION Number :  ${VERSION} "
         }
