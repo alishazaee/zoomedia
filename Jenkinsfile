@@ -28,6 +28,8 @@ pipeline {
             sh 'git add .'
             sh 'git commit -m "ci-pipeline version bumping"'
             sh 'git push origin HEAD:master'
+            sh 'exit'
+
           }
 
         }
