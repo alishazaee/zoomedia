@@ -14,8 +14,13 @@ pipeline {
       steps {
         script {
           sh 'docker build  -f docker/production.Dockerfile -t test .'
-          sh 'docker run  -i --rm test bash'
-          
+          // sh 'docker run  -it --rm test bash'
+          agent {
+                docker {
+                    image 'test'
+                    reuseNode true
+                }
+            }          
           def OUTPUT = sh(script:'bump --patch',returnStdout: true).trim()
           env.APP_VERSION = OUTPUT
           sh 'echo ${APP_VERSION}'
