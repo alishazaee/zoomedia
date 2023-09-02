@@ -2,7 +2,7 @@ pipeline {
   agent any
   
   environment {
-    APP_VERSION = "${BUILD_NUMBER}"
+    BUILD_VERSION = "${BUILD_NUMBER}"
     DOCKER_REGISTRY = "alishazaei"
     DOCKER_REPO = "zoomedia"
     DOCKER_IMAGE_TAG = "${DOCKER_REGISTRY}/${DOCKER_REPO}:${APP_VERSION}"
@@ -13,9 +13,8 @@ pipeline {
   stage('Installing Bump') {
       steps {
         script {
-          sh 'apt install pip pipenv -y || (apt update && apt install pip pipenv -y)'
-          sh 'pipenv shell'
-          sh 'pip install bump==1.3.2'
+          sh 'docker build  -f docker/production.Dockerfile -t test .'
+          env.APP_VERSION = sh 'docker run --rm test bump'
         }
       }
     }
@@ -26,9 +25,9 @@ pipeline {
           sh 'bump patch'
           def VERSION
           script {
-            VERSION = sh(script: 'echo $(bump)-${env.APP_VERSION}', returnStdout: true).trim()
+            VERSION = "${APP_VERSION}-${BUILD_VERSION}"
           }
-          sh "echo VERSION Number :  ${VERSION} "
+          sh "echo VERSION Number :  ${APP_VERSION}-${BUILD_VERSION} "
         }
       }
     }
