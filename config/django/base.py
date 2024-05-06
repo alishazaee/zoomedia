@@ -80,6 +80,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/django.log',
+            'formatter': 'json',
+        },
+    },
+    'loggers': {    
+        'django.server': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'json': {
+            'format': '{"timestamp": "%(asctime)s", "message": "%(message)s"  , "level" : "%(levelname)s" }',
+           
+        },
+     
+    },
+
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

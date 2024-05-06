@@ -17,7 +17,6 @@ eggs/
 lib/
 lib64/
 parts/
-migrations/
 sdist/
 var/
 wheels/
@@ -94,7 +93,7 @@ ipython_config.py
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
-
+Pipfile
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
@@ -128,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDE
+.idea
