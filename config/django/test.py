@@ -21,3 +21,5 @@ DATABASES = {
         "NAME": "db.sqlite3",
         }
     }
+PROMETHEUS_MULTIPROC_DIR = "/tmp/prometheus_multiproc_dir"
+PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8001, 8020)

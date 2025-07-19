@@ -20,3 +20,6 @@ SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     "SECURE_CONTENT_TYPE_NOSNIFF", default=True
 )
+PROMETHEUS_MULTIPROC_DIR = "/tmp/prometheus_multiproc_dir"
+PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8001, 8020)
+os.makedirs(PROMETHEUS_MULTIPROC_DIR, exist_ok=True)

@@ -3,3 +3,7 @@ from .base import *  # noqa
 CELERY_BROKER_BACKEND = "memory"
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
+PROMETHEUS_MULTIPROC_DIR = "/tmp/prometheus_multiproc_dir"
+os.makedirs(PROMETHEUS_MULTIPROC_DIR, exist_ok=True)
+
+PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8001, 8020)
